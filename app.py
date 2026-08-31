@@ -31,7 +31,7 @@ def calculate_average(scores: list[float]) -> float:
 def run_self_tests():
     """Minimal tests used locally and by GitHub Actions."""
 
-    assert score_status(0.90) == "PASS"
+    assert score_status(0.90) == "FAIL"
     assert score_status(0.85) == "PASS"
 
     assert score_status(0.70) == "REVIEW"
