@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - main
-      - "feature/**"
+      - feature/ci-demo
 
   pull_request:
     branches:
       - main
 
 jobs:
-  test:
+  test-and-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,8 +28,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Compile Python
-        run: python -m py_compile app.py
-
       - name: Run application tests
-        run: python app.py --test
+        run: |
+          python app.py --test
+
+      - name: Build Docker image
+        run: |
+          docker build -t ci-demo-app .
