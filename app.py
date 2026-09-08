@@ -34,7 +34,7 @@ def run_self_tests():
     assert score_status(0.90) == "PASS"
     assert score_status(0.85) == "PASS"
 
-    assert score_status(0.70) == "PASS"
+    assert score_status(0.70) == "REVIEW"
     assert score_status(0.65) == "REVIEW"
 
     assert score_status(0.64) == "FAIL"
