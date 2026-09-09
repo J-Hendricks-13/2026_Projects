@@ -91,3 +91,29 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/ci-demo-app:latest .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/ci-demo-app:latest
+    
+  deploy-local:
+    name: Deploy to Local Docker
+    runs-on: [self-hosted, local, docker]
+
+    needs: test-and-build
+
+    steps:
+      - name: Pull latest application image
+        run: |
+          docker pull jhendricks11/ci-demo-app:latest
+
+      - name: Stop existing application
+        run: |
+          docker rm -f ci-demo-app 2>/dev/null || true
+
+      - name: Start application
+        run: |
+          docker run -d \
+            --name ci-demo-app \
+            -p 8501:8501 \
+            jhendricks11/ci-demo-app:latest
+
+      - name: Verify container
+        run: |
+          docker ps --filter "name=ci-demo-app"
