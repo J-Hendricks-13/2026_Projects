@@ -27,7 +27,7 @@ def calculate_average(scores: list[float]) -> float:
 
     return sum(scores) / len(scores)
 
-
+#########
 def run_self_tests():
     """Minimal tests used locally and by GitHub Actions."""
 
