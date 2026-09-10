@@ -104,7 +104,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          
+
       - name: Pull latest application image
         run: |
           docker pull jhendricks11/ci-demo-app:latest
@@ -123,3 +123,27 @@ jobs:
       - name: Verify container
         run: |
           docker ps --filter "name=ci-demo-app"
+  
+  notify-teams:
+    name: Notify Teams
+    runs-on: ubuntu-latest
+    needs: deploy-local
+
+    if: always()
+
+    steps:
+      - name: Send Teams notification
+        run: |
+          STATUS="${{ needs.deploy-local.result }}"
+
+          if [ "$STATUS" = "success" ]; then
+            MESSAGE="✅ CI/CD Deployment Successful"
+          else
+            MESSAGE="🚨 CI/CD Deployment Failed"
+          fi
+
+          curl -X POST "${{ secrets.TEAMS_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"text\": \"$MESSAGE\n\nProject: 2026_Projects\nDeployment status: $STATUS\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}\"
+            }"
