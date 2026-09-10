@@ -120,6 +120,8 @@ def main():
         f"{average:.2f}",
     )
 
+    print("hello")
+
     st.write(f"**Overall Status: {score_status(average)}**")
 
 
